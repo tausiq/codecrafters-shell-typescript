@@ -1,16 +1,21 @@
 
-  # Implement exit (#pn5)                                                     
+  # Implement echo (#iz3)                                                     
                                                                               
-  In this stage, you'll implement the exit builtin.                           
+  In this stage, you'll implement the echo builtin.                           
                                                                               
-  ### The exit Builtin                                                        
+  ### The echo Builtin                                                        
                                                                               
-  The exit                                                                    
-  https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.       
-  html#exit                                                                   
-  builtin is a special command that terminates the shell.                     
+  The echo                                                                    
+  https://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html builtin
+  prints its arguments to stdout, with spaces between them, and a newline (\n)
+  at the end.                                                                 
                                                                               
-  When your shell receives the exit command, it should terminate immediately. 
+  Example usage:                                                              
+                                                                              
+    $ echo hello world                                                        
+    hello world                                                               
+    $ echo one two three                                                      
+    one two three                                                             
                                                                               
   ### Tests                                                                   
                                                                               
@@ -18,13 +23,21 @@
                                                                               
     ./your_program.sh                                                         
                                                                               
-  It will then send an invalid command to your shell, followed by the exit    
-  command:                                                                    
+  It will then send a series of echo commands to your shell:                  
                                                                               
-    $ invalid_command_1                                                       
-    invalid_command_1: command not found                                      
-    $ exit                                                                    
+    $ echo hello world                                                        
+    hello world                                                               
+    $ echo pineapple strawberry                                               
+    pineapple strawberry                                                      
+    $                                                                         
                                                                               
-  The tester will verify that your shell terminates after receiving the exit  
-  command.                                                                    
+  After each command, the tester will verify that the echo command correctly  
+  prints the provided text back.                                              
+                                                                              
+  ### Notes                                                                   
+                                                                              
+  • Most languages' standard output functions like console.log() (JavaScript),
+  print() (Python), or println() (Java) automatically add a newline, which is 
+  what you want here. If your language requires explicit newlines (like C's   
+  printf()), make sure to add \n at the end.                                  
 
