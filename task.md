@@ -1,21 +1,32 @@
 
-  # Implement echo (#iz3)                                                     
+  # Implement type (#ez5)                                                     
                                                                               
-  In this stage, you'll implement the echo builtin.                           
+  In this stage, you'll implement the type builtin for your shell.            
                                                                               
-  ### The echo Builtin                                                        
+  ### The type Builtin                                                        
                                                                               
-  The echo                                                                    
-  https://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html builtin
-  prints its arguments to stdout, with spaces between them, and a newline (\n)
-  at the end.                                                                 
+  The type                                                                    
+  https://pubs.opengroup.org/onlinepubs/9799919799/utilities/type.html builtin
+  is used to determine how a command would be interpreted if it were used. It 
+  checks whether a command is a builtin, an executable file, or unrecognized. 
                                                                               
-  Example usage:                                                              
+  For example:                                                                
                                                                               
-    $ echo hello world                                                        
-    hello world                                                               
-    $ echo one two three                                                      
-    one two three                                                             
+    $ type echo                                                               
+    echo is a shell builtin                                                   
+    $ type exit                                                               
+    exit is a shell builtin                                                   
+    $ type invalid_command                                                    
+    invalid_command: not found                                                
+                                                                              
+  For this stage, you'll handle two cases:                                    
+                                                                              
+  • For builtin commands (like echo, exit, and type), print <command> is a    
+  shell builtin.                                                              
+  • For unrecognized commands that don't match any builtin, print <command>:  
+  not found.                                                                  
+                                                                              
+  We'll handle executable files in later stages.                              
                                                                               
   ### Tests                                                                   
                                                                               
@@ -23,21 +34,27 @@
                                                                               
     ./your_program.sh                                                         
                                                                               
-  It will then send a series of echo commands to your shell:                  
+  It will then send a series of type commands to your shell:                  
                                                                               
-    $ echo hello world                                                        
-    hello world                                                               
-    $ echo pineapple strawberry                                               
-    pineapple strawberry                                                      
+    $ type echo                                                               
+    echo is a shell builtin                                                   
+    $ type exit                                                               
+    exit is a shell builtin                                                   
+    $ type type                                                               
+    type is a shell builtin                                                   
+    $ type invalid_command                                                    
+    invalid_command: not found                                                
     $                                                                         
                                                                               
-  After each command, the tester will verify that the echo command correctly  
-  prints the provided text back.                                              
+  The tester will verify that:                                                
+                                                                              
+  • Builtin commands print: <command> is a shell builtin                      
+  • Unrecognized commands print: <command>: not found                         
                                                                               
   ### Notes                                                                   
                                                                               
-  • Most languages' standard output functions like console.log() (JavaScript),
-  print() (Python), or println() (Java) automatically add a newline, which is 
-  what you want here. If your language requires explicit newlines (like C's   
-  printf()), make sure to add \n at the end.                                  
+  • The tester will only check for builtin commands and unrecognized commands 
+  in this stage.                                                              
+  • type itself is a shell builtin command, so $ type type should print type  
+  is a shell builtin.                                                         
 

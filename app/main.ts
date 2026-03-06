@@ -6,6 +6,8 @@ const rl = createInterface({
   prompt: "$ ",
 });
 
+const builtins = ['echo', 'exit', 'type'];
+
 rl.prompt();
 
 rl.on("line", (input: string) => {
@@ -17,7 +19,13 @@ rl.on("line", (input: string) => {
         rl.close();
         return;
     } else if (command == 'echo') {
-        console.log(args)
+        console.log(args);
+    } else if (command == 'type') {
+        if (builtins.includes(args)) {
+            console.log(`${args} is a shell builtin`);
+        } else {
+            console.log(`${args}: not found`);
+        }
     } else if (command) {
         console.log(`${command}: command not found`); // backticks for interpolate 
     }
