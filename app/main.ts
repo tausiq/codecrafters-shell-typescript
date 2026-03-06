@@ -12,7 +12,10 @@ rl.on("line", (input: string) => {
     const trimmedInput = input.trim();
     const command = trimmedInput.split(" ")[0];
 
-    if (command) {
+    if (command == 'exit') {
+        rl.close();
+        return;
+    } else if (command) {
         console.log(`${command}: command not found`); // backticks for interpolate 
     }
 
