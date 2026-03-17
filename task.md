@@ -1,60 +1,75 @@
 
-  # Implement type (#ez5)                                                     
+  # Locate executable files (#mg5)                                            
                                                                               
-  In this stage, you'll implement the type builtin for your shell.            
+  In this stage, you'll extend the type builtin to search for executable files
+  using PATH.                                                                 
                                                                               
-  ### The type Builtin                                                        
+  ### The PATH Environment Variable                                           
                                                                               
-  The type                                                                    
-  https://pubs.opengroup.org/onlinepubs/9799919799/utilities/type.html builtin
-  is used to determine how a command would be interpreted if it were used. It 
-  checks whether a command is a builtin, an executable file, or unrecognized. 
+  The PATH https://en.wikipedia.org/wiki/PATH_(variable) environment variable 
+  specifies a list of directories where the shell should look for executable  
+  programs.                                                                   
+                                                                              
+  For example, if the PATH is set to /dir1:/dir2:/dir3, the shell would search
+  for executables in /dir1, then /dir2, and finally /dir3, in that order.     
+                                                                              
+  ### Searching for Executables                                               
+                                                                              
+  When type receives a command input, your shell must follow these steps:     
+                                                                              
+  1. Check if the command is a builtin command (like exit or echo). If it is, 
+  report it as a builtin (<command> is a shell builtin) and stop.             
+  2. If the command is not a builtin, your shell must go through every        
+  directory in PATH. For each directory:                                      
+      1. Check if a file with the command name exists.                        
+      2. Check if the file has **execute permissions**.                       
+      3. If the file exists and has execute permissions, print <command> is   
+      <full_path> and stop.                                                   
+      4. If the file exists but **lacks execute permissions**, skip it and    
+      continue to the next directory.                                         
+  3. If no executable is found in any directory, print <command>: not found.  
                                                                               
   For example:                                                                
                                                                               
-    $ type echo                                                               
-    echo is a shell builtin                                                   
-    $ type exit                                                               
-    exit is a shell builtin                                                   
+    $ type grep                                                               
+    grep is /usr/bin/grep                                                     
     $ type invalid_command                                                    
     invalid_command: not found                                                
-                                                                              
-  For this stage, you'll handle two cases:                                    
-                                                                              
-  • For builtin commands (like echo, exit, and type), print <command> is a    
-  shell builtin.                                                              
-  • For unrecognized commands that don't match any builtin, print <command>:  
-  not found.                                                                  
-                                                                              
-  We'll handle executable files in later stages.                              
+    $ type echo                                                               
+    echo is a shell builtin                                                   
                                                                               
   ### Tests                                                                   
                                                                               
-  The tester will execute your program like this:                             
+  The tester will execute your program with a custom PATH like this:          
                                                                               
-    ./your_program.sh                                                         
+    PATH="/usr/bin:/usr/local/bin:$PATH" ./your_program.sh                    
                                                                               
   It will then send a series of type commands to your shell:                  
                                                                               
-    $ type echo                                                               
-    echo is a shell builtin                                                   
-    $ type exit                                                               
-    exit is a shell builtin                                                   
-    $ type type                                                               
-    type is a shell builtin                                                   
+    $ type ls                                                                 
+    ls is /usr/bin/ls                                                         
+    $ type valid_command                                                      
+    valid_command is /usr/local/bin/valid_command                             
     $ type invalid_command                                                    
     invalid_command: not found                                                
     $                                                                         
                                                                               
-  The tester will verify that:                                                
+  The tester will verify that the type command correctly identifies executable
+  files in the PATH:                                                          
                                                                               
-  • Builtin commands print: <command> is a shell builtin                      
-  • Unrecognized commands print: <command>: not found                         
+  • Executable files in PATH are reported with their full path (<command> is  
+  <full_path>).                                                               
+  • Files without execute permissions are skipped.                            
+  • Non-existent commands print the <command>: not found message.             
                                                                               
   ### Notes                                                                   
                                                                               
-  • The tester will only check for builtin commands and unrecognized commands 
-  in this stage.                                                              
-  • type itself is a shell builtin command, so $ type type should print type  
-  is a shell builtin.                                                         
+  • Most languages provide functions to check execute permissions for a file  
+  (like os.access(path, os.X_OK) in Python, or Files.isExecutable() in Java). 
+  • PATH can include directories that don’t exist on disk, so your code should
+  handle such cases gracefully.                                               
+  • When parsing the PATH environment variable, remember that the delimiter   
+  (usually : or ;) can vary by operating system. Use OS-agnostic path handling
+  provided by your language (like os.pathsep in Python, File.pathSeparator in 
+  Java, or path.delimiter in Node.js) to correctly split the directories.     
 
