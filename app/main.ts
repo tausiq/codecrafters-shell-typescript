@@ -9,7 +9,7 @@ const rl = createInterface({
   prompt: "$ ",
 });
 
-const builtins = ['echo', 'exit', 'type', 'pwd'];
+const builtins = ['echo', 'exit', 'type', 'pwd', 'cd'];
 
 function findExecutable(command: string): string | null {
     const pathEnv = process.env.PATH || "";
@@ -62,6 +62,16 @@ rl.on("line", (input: string) => {
     } else if (command == 'pwd') {
         console.log(process.cwd()); // returns the current working directory as a string 
 
+    } else if (command == 'cd') {
+        const targetDir = args[0];
+        if (targetDir) {
+            try {
+                process.chdir(targetDir); // Change current working directory 
+            } catch (err) {
+                console.log(`cd: ${targetDir}: No such file or directory`);
+            }
+        }
+        
     } else if (command) {
         const executablePath = findExecutable(command);
         if (executablePath) {

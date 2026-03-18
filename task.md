@@ -1,23 +1,46 @@
 
-  # The pwd builtin (#ei0)                                                    
+  # The cd builtin: Absolute paths (#ra6)                                     
                                                                               
-  In this stage, you'll implement the pwd builtin.                            
+  In this stage, you'll implement the cd builtin to handle absolute paths.    
                                                                               
-  ### The pwd Builtin                                                         
+  ### The cd Builtin                                                          
                                                                               
-  The pwd https://en.wikipedia.org/wiki/Pwd (print working directory) builtin 
-  prints the full, absolute path of the current working directory to stdout.  
+  The cd (change directory) builtin is used to change the current working     
+  directory.                                                                  
                                                                               
-  When your shell starts, its current working directory is typically the      
-  directory from which it was executed. Your pwd implementation needs to      
-  retrieve this information from the operating system and print it.           
+  The cd command can handle different types of arguments:                     
+                                                                              
+  • Absolute paths, like /usr/local/bin.                                      
+  • Relative paths, like ./, ../, ./dir.                                      
+  • The ~ character, which represents the user's home directory.              
+                                                                              
+  For this stage, we'll focus on absolute paths.                              
+                                                                              
+  ### Handling Absolute Paths                                                 
+                                                                              
+  An absolute path starts with / and specifies a location from the root of the
+  filesystem.                                                                 
+                                                                              
+  When cd receives an absolute path:                                          
+                                                                              
+  • If the directory exists, change to that directory.                        
+  • If the directory doesn't exist, print cd: <directory>: No such file or    
+  directory.                                                                  
                                                                               
   For example:                                                                
                                                                               
     $ pwd                                                                     
-    /home/user/projects                                                       
+    /home/user                                                                
+    $ cd /usr/local/bin                                                       
     $ pwd                                                                     
     /usr/local/bin                                                            
+    $ cd /does_not_exist                                                      
+    cd: /does_not_exist: No such file or directory                            
+    $ pwd                                                                     
+    /usr/local/bin                                                            
+                                                                              
+  If the directory change fails, the current directory should remain          
+  unchanged.                                                                  
                                                                               
   ### Tests                                                                   
                                                                               
@@ -25,17 +48,24 @@
                                                                               
     ./your_program.sh                                                         
                                                                               
-  It will then send a pwd command to your shell:                              
+  It will then send a series of cd commands to your shell:                    
                                                                               
+    $ cd /usr/local/bin                                                       
     $ pwd                                                                     
-    /path/to/current/directory                                                
+    /usr/local/bin                                                            
+    $ cd /does_not_exist                                                      
+    cd: /does_not_exist: No such file or directory                            
     $                                                                         
                                                                               
-  The tester will verify that the pwd command correctly displays the current  
-  working directory.                                                          
+  The tester will verify that:                                                
+                                                                              
+  • Valid paths change the directory.                                         
+  • Invalid paths print the error message cd: <directory>: No such file or    
+  directory.                                                                  
+  • Invalid paths don't change the current directory.                         
                                                                               
   ### Notes                                                                   
                                                                               
-  • The pwd command must print the full absolute path of the current working  
-  directory.                                                                  
+  • Check if the directory exists before attempting to change to it, or handle
+  the error if the change fails.                                              
 
