@@ -1,27 +1,23 @@
 
-  # Run a program (#ip1)                                                      
+  # The pwd builtin (#ei0)                                                    
                                                                               
-  In this stage, you'll add support for running external programs with        
-  arguments.                                                                  
+  In this stage, you'll implement the pwd builtin.                            
                                                                               
-  ### Running External Programs                                               
+  ### The pwd Builtin                                                         
                                                                               
-  So far, you've implemented builtin commands that your shell executes        
-  directly. Now you'll handle external programs that your shell needs to find 
-  and run.                                                                    
+  The pwd https://en.wikipedia.org/wiki/Pwd (print working directory) builtin 
+  prints the full, absolute path of the current working directory to stdout.  
                                                                               
-  When a command isn't a builtin, your shell should:                          
+  When your shell starts, its current working directory is typically the      
+  directory from which it was executed. Your pwd implementation needs to      
+  retrieve this information from the operating system and print it.           
                                                                               
-  1. Determine if the given command is an executable (you can reuse the logic 
-  from type)                                                                  
-  2. If it is, execute the program                                            
-  3. Pass any arguments from the command line to the program                  
+  For example:                                                                
                                                                               
-  For example, if the user types custom_exe arg1 arg2, your shell should:     
-                                                                              
-  • Determine if custom_exe is an executable in PATH                          
-  • Execute it with three arguments: custom_exe (the program name), arg1, and 
-  arg2                                                                        
+    $ pwd                                                                     
+    /home/user/projects                                                       
+    $ pwd                                                                     
+    /usr/local/bin                                                            
                                                                               
   ### Tests                                                                   
                                                                               
@@ -29,33 +25,17 @@
                                                                               
     ./your_program.sh                                                         
                                                                               
-  It will then send a command that you need to execute:                       
+  It will then send a pwd command to your shell:                              
                                                                               
-    $ custom_exe_1234 alice                                                   
-    Program was passed 2 args (including program name).                       
-    Arg #0 (program name): custom_exe_1234                                    
-    Arg #1: alice                                                             
-    Program Signature: 5998595441                                             
+    $ pwd                                                                     
+    /path/to/current/directory                                                
+    $                                                                         
                                                                               
-  The output shown above comes from the executable itself. Your shell just    
-  needs to run it and let its output display.                                 
-                                                                              
-  The tester will verify that:                                                
-                                                                              
-  • Your shell correctly finds and executes the program                       
-  • The program's output appears in your shell                                
-  • The arguments are passed correctly                                        
-                                                                              
-  The tester will run multiple commands and use a random number of arguments  
-  each time.                                                                  
+  The tester will verify that the pwd command correctly displays the current  
+  working directory.                                                          
                                                                               
   ### Notes                                                                   
                                                                               
-  • The program name, arguments, and the expected output will be random for   
-  each test case.                                                             
-  • The output in the example ("Program was passed N args...") comes from the 
-  executable. It's not something you need to implement manually.              
-  • You'll need to use your operating system's API to execute external        
-  programs (like exec family in Unix, subprocess in Python, child_process in  
-  Node.js, etc.)                                                              
+  • The pwd command must print the full absolute path of the current working  
+  directory.                                                                  
 

@@ -9,7 +9,7 @@ const rl = createInterface({
   prompt: "$ ",
 });
 
-const builtins = ['echo', 'exit', 'type'];
+const builtins = ['echo', 'exit', 'type', 'pwd'];
 
 function findExecutable(command: string): string | null {
     const pathEnv = process.env.PATH || "";
@@ -40,12 +40,15 @@ rl.on("line", (input: string) => {
     if (command == 'exit') {
         rl.close();
         return;
+
     } else if (command == 'echo') {
         console.log(args.join(" ")); // Join args back with spaces 
+
     } else if (command == 'type') {
         const targetCommand = args[0]; // Get first argument for type command 
         if (builtins.includes(targetCommand)) {
             console.log(`${targetCommand} is a shell builtin`);
+
         } else {
             const executablePath = findExecutable(targetCommand);
             if (executablePath) {
@@ -53,7 +56,12 @@ rl.on("line", (input: string) => {
             } else {
                 console.log(`${targetCommand}: not found`);
             }
+
         }
+
+    } else if (command == 'pwd') {
+        console.log(process.cwd()); // returns the current working directory as a string 
+
     } else if (command) {
         const executablePath = findExecutable(command);
         if (executablePath) {
@@ -64,6 +72,7 @@ rl.on("line", (input: string) => {
         } else {
             console.log(`${command}: command not found`); // backticks for interpolate 
         }
+
     }
 
     rl.prompt();
