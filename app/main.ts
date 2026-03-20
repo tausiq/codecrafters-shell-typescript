@@ -63,7 +63,13 @@ rl.on("line", (input: string) => {
         console.log(process.cwd()); // returns the current working directory as a string 
 
     } else if (command == 'cd') {
-        const targetDir = args[0];
+        let targetDir = args[0];
+
+        // Expand ~ to home directory
+        if (targetDir.startsWith('~')) {
+            targetDir = targetDir.replace('~', process.env.HOME || '');
+        }
+
         if (targetDir) {
             try {
                 process.chdir(targetDir); // Change current working directory 
@@ -71,7 +77,7 @@ rl.on("line", (input: string) => {
                 console.log(`cd: ${targetDir}: No such file or directory`);
             }
         }
-        
+
     } else if (command) {
         const executablePath = findExecutable(command);
         if (executablePath) {

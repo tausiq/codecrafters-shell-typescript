@@ -1,46 +1,43 @@
 
-  # The cd builtin: Absolute paths (#ra6)                                     
+  # The cd builtin: Home directory (#gp4)                                     
                                                                               
-  In this stage, you'll implement the cd builtin to handle absolute paths.    
+  In this stage, you'll extend your cd builtin to handle the ~ character.     
                                                                               
-  ### The cd Builtin                                                          
+  ### The cd Builtin (Recap)                                                  
                                                                               
-  The cd (change directory) builtin is used to change the current working     
-  directory.                                                                  
+  As a recap, cd can receive multiple argument types:                         
                                                                               
-  The cd command can handle different types of arguments:                     
+  • Absolute paths, like /usr/local/bin. (Handled in earlier stages)          
+  • Relative paths, like ./, ../, ./dir. (Handled in previous stages)         
+  • The ~ character.                                                          
                                                                               
-  • Absolute paths, like /usr/local/bin.                                      
-  • Relative paths, like ./, ../, ./dir.                                      
-  • The ~ character, which represents the user's home directory.              
+  ### The ~ Character                                                         
                                                                               
-  For this stage, we'll focus on absolute paths.                              
+  The ~ (tilde) character is shorthand for the user's home directory. It's a  
+  convenient way to quickly navigate back to your home directory from anywhere
+  in the filesystem.                                                          
                                                                               
-  ### Handling Absolute Paths                                                 
+  The home directory is specified by the HOME                                 
+  https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.        
+  html#tag_08_03                                                              
+  environment variable. When your shell sees cd ~, it should:                 
                                                                               
-  An absolute path starts with / and specifies a location from the root of the
-  filesystem.                                                                 
-                                                                              
-  When cd receives an absolute path:                                          
-                                                                              
-  • If the directory exists, change to that directory.                        
-  • If the directory doesn't exist, print cd: <directory>: No such file or    
-  directory.                                                                  
+  1. Read the value of the HOME environment variable                          
+  2. Change to that directory                                                 
                                                                               
   For example:                                                                
                                                                               
     $ pwd                                                                     
+    /usr/local/bin                                                            
+    $ cd ~                                                                    
+    $ pwd                                                                     
     /home/user                                                                
-    $ cd /usr/local/bin                                                       
+    $ cd /var/log                                                             
     $ pwd                                                                     
-    /usr/local/bin                                                            
-    $ cd /does_not_exist                                                      
-    cd: /does_not_exist: No such file or directory                            
+    /var/log                                                                  
+    $ cd ~                                                                    
     $ pwd                                                                     
-    /usr/local/bin                                                            
-                                                                              
-  If the directory change fails, the current directory should remain          
-  unchanged.                                                                  
+    /home/user                                                                
                                                                               
   ### Tests                                                                   
                                                                               
@@ -53,19 +50,19 @@
     $ cd /usr/local/bin                                                       
     $ pwd                                                                     
     /usr/local/bin                                                            
-    $ cd /does_not_exist                                                      
-    cd: /does_not_exist: No such file or directory                            
+    $ cd ~                                                                    
+    $ pwd                                                                     
+    /home/user                                                                
     $                                                                         
                                                                               
   The tester will verify that:                                                
                                                                               
-  • Valid paths change the directory.                                         
-  • Invalid paths print the error message cd: <directory>: No such file or    
-  directory.                                                                  
-  • Invalid paths don't change the current directory.                         
+  • cd ~ changes to the home directory.                                       
+  • The home directory matches the value of the HOME environment variable.    
                                                                               
   ### Notes                                                                   
                                                                               
-  • Check if the directory exists before attempting to change to it, or handle
-  the error if the change fails.                                              
+  • Most languages provide functions to read environment variables (like      
+  process.env.HOME in Node.js, os.getenv('HOME') in Python, or getenv("HOME") 
+  in C).                                                                      
 
